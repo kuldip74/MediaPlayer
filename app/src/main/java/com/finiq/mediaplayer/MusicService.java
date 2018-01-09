@@ -15,6 +15,7 @@ package com.finiq.mediaplayer;
         import android.os.IBinder;
         import android.os.PowerManager;
         import android.util.Log;
+        import android.widget.Toast;
 
 /**
  * Created by ADMIN on 1/8/2018.
@@ -212,8 +213,12 @@ public class MusicService extends Service implements
 
     //toggle shuffle
     public void setShuffle(){
-        if(shuffle) shuffle=false;
-        else shuffle=true;
+        if(shuffle){
+            Toast.makeText(this, "Shuffle Off", Toast.LENGTH_SHORT).show();
+            shuffle=false;}
+        else{
+            Toast.makeText(this,"Shuffle On",Toast.LENGTH_SHORT).show();
+            shuffle=true;}
     }
 
 }

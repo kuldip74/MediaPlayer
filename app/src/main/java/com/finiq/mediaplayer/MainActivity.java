@@ -16,6 +16,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.View;
+import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.MediaController;
 
@@ -42,6 +43,9 @@ public class MainActivity extends AppCompatActivity implements MediaController.M
 
     //controller
     private MusicController controller;
+
+    //Menu
+    Menu menu;
 
     //activity and playback pause flags
     private boolean paused = false, playbackPaused = false;
@@ -118,6 +122,13 @@ public class MainActivity extends AppCompatActivity implements MediaController.M
     //user song select
     public void songPicked(View view) {
         musicSrv.setSong(Integer.parseInt(view.getTag().toString()));
+
+        ImageView playImage = (ImageView)findViewById(R.id.image_play);
+        playImage.setVisibility(View.GONE);
+
+        ImageView pauseImage = (ImageView)findViewById(R.id.image_pause);
+        pauseImage.setVisibility(View.VISIBLE);
+
         musicSrv.playSong();
         if (playbackPaused) {
             setController();
@@ -130,6 +141,7 @@ public class MainActivity extends AppCompatActivity implements MediaController.M
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
+        this.menu = menu;
         getMenuInflater().inflate(R.menu.main, menu);
         return true;
     }
@@ -139,7 +151,7 @@ public class MainActivity extends AppCompatActivity implements MediaController.M
         //menu item selected
         switch (menuItem.getItemId()) {
             case R.id.action_shuffle:
-                musicSrv.setShuffle();
+                    musicSrv.setShuffle();
                 break;
 
             case R.id.action_end:
