@@ -69,7 +69,7 @@
                     android:textSize="25sp"
                     android:textStyle="bold" />
                 <ImageButton
-                    android:id="@+id/imageButton_setting"
+                    android:id="@+id/imageButton_close"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_alignParentEnd="true"
@@ -78,7 +78,7 @@
                     android:layout_marginRight="16dp"
                     android:background="@android:color/transparent"
                     android:onClick="loginSettings"
-                    android:src="@drawable/ic_add_box_black_24dp" />
+                    android:src="@drawable/ic_close_black_24dp" />
 
             </RelativeLayout>
 
