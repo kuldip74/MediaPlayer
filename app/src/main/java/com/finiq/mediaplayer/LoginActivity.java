@@ -4,15 +4,15 @@ import android.content.Context;
 import android.content.Intent;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
-import android.provider.Settings;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.app.ActionBar;
+import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.FrameLayout;
 import android.widget.ImageButton;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.finiq.mediaplayer.network.NetworkCalls;
@@ -26,21 +26,28 @@ import retrofit2.converter.gson.GsonConverterFactory;
 
 public class LoginActivity extends AppCompatActivity {
 
-    EditText mName, mUsername, mPassword;
-    ImageButton mClose;
     public static final String Base_Url = "http://finiqwebapp.azurewebsites.net";
-    String id;
+    EditText mName, mUsername, mPassword;
+    TextView skipTextView;
+    ImageButton closeButton;
+    String id, name, username, password;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
 
+        //Hiding ActionBar on register activity
+        ActionBar myActionBar = getSupportActionBar();
+        myActionBar.hide();
+
         Button loginButton = (Button) findViewById(R.id.login_button);
         mName = (EditText)findViewById(R.id.editText_name);
         mUsername = (EditText)findViewById(R.id.editText_username);
         mPassword = (EditText)findViewById(R.id.editText_password);
-        mClose = (ImageButton)findViewById(R.id.imageButton_close);
+        closeButton = (ImageButton) findViewById(R.id.imageButton_close);
+        skipTextView = (TextView) findViewById(R.id.skipButton);
 
         mName.setText("kuldeep");
         mUsername.setText("kuldeep74");
@@ -52,10 +59,16 @@ public class LoginActivity extends AppCompatActivity {
                 login(v);
             }
         });
-        mClose.setOnClickListener(new View.OnClickListener() {
+        closeButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 System.exit(0);
+            }
+        });
+        skipTextView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(LoginActivity.this, MainActivity.class));
             }
         });
     }
@@ -98,7 +111,13 @@ public class LoginActivity extends AppCompatActivity {
                                             Toast.LENGTH_SHORT).show();
 
                                     id = response.body().getId().toString();
-                                    Log.d( "ID.......",id);
+                                    name = response.body().getName().toString();
+                                    username = response.body().getUsername().toString();
+                                    password = response.body().getPassword().toString();
+                                    Log.d("responseID.......", id);
+                                    Log.d("Name.......", name);
+                                    Log.d("UserName.......", username);
+                                    Log.d("Password.......", password);
                                     startActivity(new Intent(LoginActivity.this, MainActivity.class));
 
                                 }

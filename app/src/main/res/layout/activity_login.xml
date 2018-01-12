@@ -1,38 +1,39 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    xmlns:tools="http://schemas.android.com/tools"
-    tools:context="com.finiq.mediaplayer.LoginActivity"
-    android:animateLayoutChanges="false">
+    android:animateLayoutChanges="false"
+    tools:context="com.finiq.mediaplayer.LoginActivity">
 
 
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_alignParentTop="true"
-        android:layout_alignParentStart="true">
+        android:layout_alignParentStart="true"
+        android:layout_alignParentTop="true">
 
         <TextView
-            android:text="@string/app_name"
             android:layout_width="match_parent"
             android:layout_height="55sp"
-            android:textSize="30sp"
-            android:background="@color/colorPrimary"
-            android:textColor="@android:color/white"
             android:layout_gravity="center_vertical"
-            android:textStyle="bold"
+            android:background="@color/colorPrimary"
             android:gravity="center"
+            android:text="@string/app_name"
+            android:textColor="@android:color/white"
+            android:textSize="30sp"
+            android:textStyle="bold"
             />
+
 
     </RelativeLayout>
 
 
     <FrameLayout
+        android:id="@+id/login_settings_frame"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:id="@+id/login_settings_frame"
         android:visibility="gone"
         >
 
@@ -57,6 +58,18 @@
                 android:id="@+id/login_bar"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content">
+
+                <ImageButton
+                    android:id="@+id/imageButton_close"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentStart="true"
+                    android:layout_centerVertical="true"
+                    android:layout_gravity="center"
+                    android:layout_marginLeft="16dp"
+                    android:background="@android:color/transparent"
+                    android:src="@drawable/ic_close_black_24dp" />
+
                 <TextView
                     android:id="@+id/title"
                     android:layout_width="wrap_content"
@@ -68,17 +81,19 @@
                     android:textColor="#000"
                     android:textSize="25sp"
                     android:textStyle="bold" />
-                <ImageButton
-                    android:id="@+id/imageButton_close"
+
+                <TextView
+                    android:id="@+id/skipButton"
                     android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
+                    android:layout_height="40sp"
                     android:layout_alignParentEnd="true"
                     android:layout_centerVertical="true"
-                    android:layout_gravity="center"
+                    android:layout_gravity="center_vertical"
                     android:layout_marginRight="16dp"
-                    android:background="@android:color/transparent"
-                    android:onClick="loginSettings"
-                    android:src="@drawable/ic_close_black_24dp" />
+                    android:gravity="center"
+                    android:text="Skip >"
+                    android:textColor="@android:color/black"
+                    android:textSize="20sp" />
 
             </RelativeLayout>
 
