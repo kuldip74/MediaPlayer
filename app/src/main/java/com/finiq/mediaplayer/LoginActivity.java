@@ -9,9 +9,8 @@ import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
+import android.widget.AutoCompleteTextView;
 import android.widget.Button;
-import android.widget.EditText;
-import android.widget.ImageButton;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -27,9 +26,10 @@ import retrofit2.converter.gson.GsonConverterFactory;
 public class LoginActivity extends AppCompatActivity {
 
     public static final String Base_Url = "http://finiqwebapp.azurewebsites.net";
-    EditText mName, mUsername, mPassword;
-    TextView skipTextView;
-    ImageButton closeButton;
+    AutoCompleteTextView mName, mUsername, mPassword;
+    TextView skipTextView, closeButton;
+    Button registerButton;
+
     String id, name, username, password;
 
 
@@ -42,18 +42,18 @@ public class LoginActivity extends AppCompatActivity {
         ActionBar myActionBar = getSupportActionBar();
         myActionBar.hide();
 
-        Button loginButton = (Button) findViewById(R.id.login_button);
-        mName = (EditText)findViewById(R.id.editText_name);
-        mUsername = (EditText)findViewById(R.id.editText_username);
-        mPassword = (EditText)findViewById(R.id.editText_password);
-        closeButton = (ImageButton) findViewById(R.id.imageButton_close);
+        registerButton = (Button) findViewById(R.id.register_buttton);
+        mName = (AutoCompleteTextView) findViewById(R.id.editText_name);
+        mUsername = (AutoCompleteTextView) findViewById(R.id.editText_username);
+        mPassword = (AutoCompleteTextView) findViewById(R.id.editText_password);
+        closeButton = (TextView) findViewById(R.id.imageButton_close);
         skipTextView = (TextView) findViewById(R.id.skipButton);
 
         mName.setText("kuldeep");
         mUsername.setText("kuldeep74");
         mPassword.setText("02051996");
 
-        loginButton.setOnClickListener(new View.OnClickListener() {
+        registerButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 login(v);
