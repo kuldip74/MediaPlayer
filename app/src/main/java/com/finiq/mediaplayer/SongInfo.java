@@ -5,20 +5,29 @@ package com.finiq.mediaplayer;
  */
 
 public class SongInfo {
-    private String songName,artistName,albumName;
+    private String songName;
+    private String artistName;
+    private String albumName;
+    private String songDuration;
     private long songID;
 
     public SongInfo(){
     }
 
-
-
-
-    public SongInfo(String songName, String artistName, String albumName, long songID){
+    public SongInfo(String songName, String artistName, String albumName, String songDuration, long songID) {
         this.songName = songName;
         this.artistName = artistName;
         this.albumName = albumName;
         this.songID = songID;
+        this.songDuration = songDuration;
+    }
+
+    public String getSongDuration() {
+        return songDuration;
+    }
+
+    public void setSongDuration(String songDuration) {
+        this.songDuration = songDuration;
     }
 
     public String getSongName() {

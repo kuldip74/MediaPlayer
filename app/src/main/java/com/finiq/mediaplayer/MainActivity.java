@@ -10,13 +10,12 @@ import android.content.pm.PackageManager;
 import android.database.Cursor;
 import android.net.Uri;
 import android.os.Build;
+import android.os.Bundle;
 import android.os.IBinder;
 import android.provider.MediaStore;
 import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
 import android.view.Menu;
 import android.view.View;
-import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.MediaController;
 
@@ -30,23 +29,39 @@ import java.util.Comparator;
 
 public class MainActivity extends AppCompatActivity implements MediaController.MediaPlayerControl {
 
+    //Menu
+    Menu menu;
     //song list variables
     private ArrayList<SongInfo> songList;
     private ListView songView;
-
     //service
     private MusicService musicSrv;
     private Intent playIntent;
-
     //binding
     private boolean musicBound = false;
+    //connect to the service
+    ServiceConnection musicConnection = new ServiceConnection() {
 
+        @Override
+        public void onServiceConnected(ComponentName name, IBinder service) {
+            MusicService.MusicBinder binder = (MusicService.MusicBinder) service;
+
+            //get service
+            musicSrv = binder.getService();
+
+            //pass list
+            musicSrv.setList(songList);
+            musicBound = true;
+        }
+
+        @Override
+        public void onServiceDisconnected(ComponentName name) {
+
+            musicBound = false;
+        }
+    };
     //controller
     private MusicController controller;
-
-    //Menu
-    Menu menu;
-
     //activity and playback pause flags
     private boolean paused = false, playbackPaused = false;
 
@@ -84,29 +99,6 @@ public class MainActivity extends AppCompatActivity implements MediaController.M
         setController();
     }
 
-        //connect to the service
-        ServiceConnection musicConnection = new ServiceConnection() {
-
-            @Override
-            public void onServiceConnected(ComponentName name, IBinder service) {
-                MusicService.MusicBinder binder = (MusicService.MusicBinder) service;
-
-                //get service
-                musicSrv = binder.getService();
-
-                //pass list
-                musicSrv.setList(songList);
-                musicBound = true;
-            }
-
-            @Override
-            public void onServiceDisconnected(ComponentName name) {
-
-                musicBound = false;
-            }
-        };
-
-
         //start and bind the service when the activity starts
     @Override
     protected void onStart() {
@@ -122,12 +114,6 @@ public class MainActivity extends AppCompatActivity implements MediaController.M
     //user song select
     public void songPicked(View view) {
         musicSrv.setSong(Integer.parseInt(view.getTag().toString()));
-
-        ImageView playImage = (ImageView)findViewById(R.id.image_play);
-        playImage.setVisibility(View.GONE);
-
-        ImageView pauseImage = (ImageView)findViewById(R.id.image_pause);
-        pauseImage.setVisibility(View.VISIBLE);
 
         musicSrv.playSong();
         if (playbackPaused) {
@@ -174,11 +160,12 @@ public class MainActivity extends AppCompatActivity implements MediaController.M
         //iterate over results
         if (cursor != null && cursor.moveToFirst()) {
 
-            //get cloumns
+            //get columns
             int titleColumn = cursor.getColumnIndex(MediaStore.Audio.Media.TITLE);
             int idColumn = cursor.getColumnIndex(MediaStore.Audio.Media._ID);
             int artistColumn = cursor.getColumnIndex(MediaStore.Audio.Media.ARTIST);
             int albumColumn = cursor.getColumnIndex(MediaStore.Audio.Media.ALBUM);
+            int durationColumn = cursor.getColumnIndex(MediaStore.Audio.Media.DURATION);
 
             //add songs to list
             do {
@@ -186,7 +173,16 @@ public class MainActivity extends AppCompatActivity implements MediaController.M
                 String thisTitle = cursor.getString(titleColumn);
                 String thisArtist = cursor.getString(artistColumn);
                 String thisAlbum = cursor.getString(albumColumn);
-                songList.add(new SongInfo(thisTitle, thisArtist, thisAlbum, thisId));
+                int thisDuration = cursor.getInt(durationColumn);
+                //Int to time convesion
+                thisDuration = thisDuration / 1000;
+                String startTime = "00:00";
+                int minutes = thisDuration;
+                int h = minutes / 60 + Integer.parseInt(startTime.substring(0, 1));
+                int m = minutes % 60 + Integer.parseInt(startTime.substring(3, 4));
+                String newtime = h + ":" + m;
+
+                songList.add(new SongInfo(thisTitle, thisArtist, thisAlbum, newtime, thisId));
             } while (cursor.moveToNext());
         }
 
