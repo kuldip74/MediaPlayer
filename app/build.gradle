@@ -2,7 +2,7 @@ apply plugin: 'com.android.application'
 
 android {
     compileSdkVersion 25
-    buildToolsVersion "25.0.2"
+    buildToolsVersion "26.0.2"
     defaultConfig {
         applicationId "com.finiq.mediaplayer"
         minSdkVersion 19
@@ -32,7 +32,6 @@ dependencies {
     compile 'com.squareup.okhttp3:okhttp:3.2.0'
     compile 'com.squareup.okhttp3:logging-interceptor:3.3.1'
     compile 'com.squareup.retrofit2:converter-gson:2.1.0'
-    compile 'com.android.support:multidex:1.0.0'
     compile 'com.squareup.retrofit2:converter-gson:2.3.0'
     compile 'com.android.support:design:25.3.1'
     testCompile 'junit:junit:4.12'

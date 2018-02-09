@@ -13,11 +13,17 @@ import android.os.Build;
 import android.os.Bundle;
 import android.os.IBinder;
 import android.provider.MediaStore;
+import android.support.annotation.NonNull;
+import android.support.design.widget.NavigationView;
+import android.support.v4.widget.DrawerLayout;
+import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.ListView;
 import android.widget.MediaController;
+import android.widget.Toast;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -31,14 +37,21 @@ public class MainActivity extends AppCompatActivity implements MediaController.M
 
     //Menu
     Menu menu;
+    private String mActivityTitle;
+    //navigation drawer variables
+    private DrawerLayout mDrawerLayout;
+    private ActionBarDrawerToggle mToggle;
     //song list variables
     private ArrayList<SongInfo> songList;
     private ListView songView;
+
     //service
     private MusicService musicSrv;
     private Intent playIntent;
+
     //binding
     private boolean musicBound = false;
+
     //connect to the service
     ServiceConnection musicConnection = new ServiceConnection() {
 
@@ -75,14 +88,48 @@ public class MainActivity extends AppCompatActivity implements MediaController.M
                 return;
             }
         }
+
+
+        mDrawerLayout = (DrawerLayout) findViewById(R.id.drawer);
+        mToggle = new ActionBarDrawerToggle(this, mDrawerLayout, R.string.drawer_open, R.string.drawer_close);
+        mDrawerLayout.addDrawerListener(mToggle);
+        mToggle.syncState();
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+
+        NavigationView navigationView = (NavigationView) findViewById(R.id.navigation_view);
+        navigationView.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
+            @Override
+            public boolean onNavigationItemSelected(@NonNull MenuItem item) {
+                int id = item.getItemId();
+                switch (id) {
+                    case R.id.home:
+                        Toast.makeText(getApplicationContext(), "Home Clicked", Toast.LENGTH_SHORT).show();
+                        break;
+
+                    case R.id.setting:
+                        Toast.makeText(getApplicationContext(), "Setting clicked", Toast.LENGTH_SHORT).show();
+                        break;
+
+                    case R.id.log:
+                        Toast.makeText(getApplicationContext(), "Logout clicked", Toast.LENGTH_SHORT).show();
+                        break;
+                }
+                return false;
+            }
+        });
+
+
         //retrieve list view
         songView = (ListView) findViewById(R.id.list_song);
 
-        //istantiate list
+        //instantiate list
         songList = new ArrayList<SongInfo>();
 
         //get song from list
         getSongList();
+
+
+        mActivityTitle = getTitle().toString();
 
         //sort alpbabetically
         Collections.sort(songList, new Comparator<SongInfo>() {
@@ -99,7 +146,8 @@ public class MainActivity extends AppCompatActivity implements MediaController.M
         setController();
     }
 
-        //start and bind the service when the activity starts
+
+    //start and bind the service when the activity starts
     @Override
     protected void onStart() {
         super.onStart();
@@ -134,6 +182,11 @@ public class MainActivity extends AppCompatActivity implements MediaController.M
 
     @Override
     public boolean onOptionsItemSelected(android.view.MenuItem menuItem) {
+
+        if (mToggle.onOptionsItemSelected(menuItem)) {
+            return true;
+        }
+
         //menu item selected
         switch (menuItem.getItemId()) {
             case R.id.action_shuffle:
@@ -318,5 +371,24 @@ public class MainActivity extends AppCompatActivity implements MediaController.M
         musicSrv = null;
         super.onDestroy();
     }
+
+/*    @Override
+    public boolean onNavigationItemSelected(@NonNull MenuItem item) {
+        int id = item.getItemId();
+        switch (id) {
+            case R.id.home:
+                Toast.makeText(this,"Home clicked",Toast.LENGTH_SHORT).show();
+                break;
+
+            case R.id.setting:
+                Toast.makeText(this,"Setting clicked",Toast.LENGTH_SHORT).show();
+                break;
+
+            case R.id.log:
+                Toast.makeText(this,"Logout clicked",Toast.LENGTH_SHORT).show();
+                break;
+        }
+        return false;
+    }*/
 }
 

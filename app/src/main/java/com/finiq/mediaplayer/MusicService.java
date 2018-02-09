@@ -1,21 +1,21 @@
 package com.finiq.mediaplayer;
 
-        import java.util.ArrayList;
-        import java.util.Random;
+import android.app.Notification;
+import android.app.PendingIntent;
+import android.app.Service;
+import android.content.ContentUris;
+import android.content.Intent;
+import android.media.AudioManager;
+import android.media.MediaPlayer;
+import android.net.Uri;
+import android.os.Binder;
+import android.os.IBinder;
+import android.os.PowerManager;
+import android.util.Log;
+import android.widget.Toast;
 
-        import android.app.Notification;
-        import android.app.PendingIntent;
-        import android.app.Service;
-        import android.content.ContentUris;
-        import android.content.Intent;
-        import android.media.AudioManager;
-        import android.media.MediaPlayer;
-        import android.net.Uri;
-        import android.os.Binder;
-        import android.os.IBinder;
-        import android.os.PowerManager;
-        import android.util.Log;
-        import android.widget.Toast;
+import java.util.ArrayList;
+import java.util.Random;
 
 /**
  * Created by ADMIN on 1/8/2018.
@@ -25,18 +25,18 @@ public class MusicService extends Service implements
         MediaPlayer.OnPreparedListener, MediaPlayer.OnErrorListener,
         MediaPlayer.OnCompletionListener {
 
+    //notification id
+    private static final int NOTIFY_ID = 1;
+    //binder
+    private final IBinder musicBind = new MusicBinder();
     //media player
     private MediaPlayer player;
     //song list
     private ArrayList<SongInfo> songs;
     //current position
     private int songPosn;
-    //binder
-    private final IBinder musicBind = new MusicBinder();
     //title of current song
     private String songTitle="";
-    //notification id
-    private static final int NOTIFY_ID=1;
     //shuffle flag and random
     private boolean shuffle=false;
     private Random rand;
@@ -70,13 +70,6 @@ public class MusicService extends Service implements
         songs=theSongs;
     }
 
-    //binder
-    public class MusicBinder extends Binder {
-        MusicService getService() {
-            return MusicService.this;
-        }
-    }
-
     //activity will bind to service
     @Override
     public IBinder onBind(Intent intent) {
@@ -98,7 +91,7 @@ public class MusicService extends Service implements
         //get song
         SongInfo playSong = songs.get(songPosn);
         //get title
-        songTitle=playSong.getSongName();
+        songTitle = playSong.getSongName();
         //get id
         long currSong = playSong.getSongID();
         //set uri
@@ -219,6 +212,13 @@ public class MusicService extends Service implements
         else{
             Toast.makeText(this,"Shuffle On",Toast.LENGTH_SHORT).show();
             shuffle=true;}
+    }
+
+    //binder
+    public class MusicBinder extends Binder {
+        MusicService getService() {
+            return MusicService.this;
+        }
     }
 
 }
